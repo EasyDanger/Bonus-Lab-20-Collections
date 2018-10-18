@@ -9,16 +9,17 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class BonusLab20 {
-	// Map of the aviable items for sale.
+	// Map of the available items for sale.
 	static Map<String, Double> priceList = new HashMap<>();
 	// Where list of items added to shopping cart will go.
 	static List<String> shoppingCart = new LinkedList<>();
 	// Scanner
 	static Scanner read = new Scanner(System.in);
 	// Holds the customer's total bill.
-	static double currentTotal;
+	static double currentTotalInt;
 	// Used to loop while loops. Primarily for menus.
 	static boolean finished = false;
+	static String currentTotal;
 
 	public static void main(String[] args) {
 		// Welcome.
@@ -91,17 +92,22 @@ public class BonusLab20 {
 		// answer is only needed here. Verifies user wants to add item.
 		String answer = read.nextLine();
 		if (checkYes(answer)) {
-			shoppingCart.add(key);
-			System.out.println(key + " has/have been added to your cart!\n");
+			//Calls howMany() method to allow user to order multiple of items at once.
+			int x = howMany(key);
+			for (int i = 0; i < x; i++) {
+						shoppingCart.add(key);	
+			}
+			System.out.println(key + " has/have been added to your cart " + x + " times!\n");
 		} else {
 		}
 		// Cleared here, as for loop will iterate to add every item's price that is
 		// stored in the shoppingCart list.
-		currentTotal = 0;
+		currentTotalInt = 0;
 		for (int i = 0; i < shoppingCart.size(); i++) {
 			// iterates to call each item in shoppingCart as the key for priceList, and adds
 			// this price to the current total.
-			currentTotal += priceList.get(shoppingCart.get(i));
+			currentTotalInt += priceList.get(shoppingCart.get(i));
+			currentTotal = String.format("%.2f", (currentTotalInt));
 		}
 		// Prints total only of items added to list.
 		System.out.println("Your current total is $" + currentTotal);
@@ -166,7 +172,7 @@ public class BonusLab20 {
 			System.out.printf("%-14s", shoppingCart.get(i));
 			System.out.printf("%12s", "$" + priceList.get(shoppingCart.get(i)) + "\n");
 		}
-		// Total still store in currentTotal, since line where it's cleared isn't
+		// Total still store in currentTotalInt, since line where it's cleared isn't
 		// returned to. Average is called from average() method.
 		System.out.println("Your total is $" + currentTotal);
 		System.out.println(average());
@@ -174,7 +180,22 @@ public class BonusLab20 {
 
 //Method to calculate and format the average price. That 'F' in the strForFPoint does NOT stand for "Floating," btw.
 	private static String average() {
-		String strForFPoint = String.format("%.2f", (currentTotal / shoppingCart.size()));
+		String strForFPoint = String.format("%.2f", (currentTotalInt / shoppingCart.size()));
 		return "Average price per item: $" + strForFPoint;
 	}
+//Method to allow user to add multiple of items at once.
+	private static int howMany(String key) {
+		System.out.println("How many of " + key + " would you like to order?");
+		String count = read.nextLine();
+		int countInt = 1;
+		if (count.matches("\\d+")) {
+			countInt = Integer.parseInt(count);
+		}
+		else {
+			System.out.println("Sorry, we need you to enter a whole number.");
+			howMany(key);
+		}
+		return countInt;
+	}
+	
 }

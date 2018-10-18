@@ -33,3 +33,9 @@ Version History
 	--does not allow user to add multiple of items at once.
 	--copy editing
 	--testing
+2.0--10/18/2018--New Feature
+	--Added method to add multiple of item at once.
+	Known Issues
+	--does not display most and least expensive items ordered
+	--copy editing
+	--testing
