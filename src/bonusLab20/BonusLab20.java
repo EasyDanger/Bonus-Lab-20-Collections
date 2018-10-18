@@ -9,16 +9,21 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class BonusLab20 {
+	//Map of the aviable items for sale.
 	static Map<String, Double> priceList = new HashMap<>();
+	//Where list of items added to shopping cart will go.
 	static List<String> shoppingCart = new LinkedList<>();
+	//Scanner
 	static Scanner read = new Scanner(System.in);
+	//Holds the customer's total bill.
 	static double currentTotal;
+	//Used to loop while loops. Primarily for menus.
 	static boolean finished = false;
-	public static void main(String[] args) {
 
+	public static void main(String[] args) {
 		// Welcome.
 		System.out.println("Welcome to the Carter Family Coop Foodshare Community Marketplace!\n");
-		// List of items and prices placed in the priceList Map.
+		// List of items and prices placed in the priceList Map. Could probably have been placed with the other variables, but I'm experimenting with different placements.
 		priceList.put("Bombs", 799.99);
 		priceList.put("Missiles", 99.99);
 		priceList.put("Super Missiles", 399.99);
@@ -35,75 +40,59 @@ public class BonusLab20 {
 		priceList.put("Gravity Suit", 799.99);
 		priceList.put("Speed Booster", 599.99);
 		priceList.put("High Jump Boots", 749.99);
-		// User Prompt.
-//		do {
-//			try {
-				do {
-		System.out.println(
-				"What item would you like to add to your shopping cart?\n(To see a list of items, type \"menu\".)");
-
-		String menuChoice = read.nextLine();
-		if (menuChoice.equalsIgnoreCase("menu")) {
-			priceList();
-			finished = false;
-		} else if (menuChoice.equalsIgnoreCase(stringIsKey(menuChoice, priceList))) {
-			String key = stringIsKey(menuChoice, priceList);
-			addToCart(key);
-			System.out.println("Are you finished adding items? (y/n)");
-			String answer = read.nextLine();
-			finished = checkYes(answer);
-		} else {
-			System.out.println("We're sorry, but we don't have that item available. :( \nPlease select another item from the list of available menu items. \n");
-			finished = false;
+//Menu structure is copied from previous lab.
+		do {
+			//User prompt.			
+			System.out.println(
+					"What item would you like to add to your shopping cart?\n(To see a list of items, type \"menu\".)");
+			//menuChoice only matters to this loop. May need to organize later instances of menuChoice v. key variable that will come up.
+			String menuChoice = read.nextLine();
+			//Calls the priceList method to display the available items. Keeps the finished = false to loop.
+			if (menuChoice.equalsIgnoreCase("menu")) {
+				priceList();
+				finished = false;
+			} 
+			//else if checks the entered menu choice is in the pricelist map, then calls the addToCart method to deal with adding it if it is. Otherwise, loops.
+			else if (menuChoice.equalsIgnoreCase(stringIsKey(menuChoice, priceList))) {
+				//Simpler to store the keys in a variable than to keep calling this method on the key and map. Also, code is easier to follow IMO if the map key is called such.
+				String key = stringIsKey(menuChoice, priceList);
+				addToCart(key);
+				System.out.println("Are you finished adding items? (y/n)");
+				String answer = read.nextLine();
+				//Stores boolean from checkYes. Simpler and cleaner up here than continuing to write code to accept yes's.
+				finished = checkYes(answer);
+			} 
+			//Loops if the item isn't a menu item or the "menu" item.
+			else {
+				System.out.println(
+						"We're sorry, but we don't have that item available. :( \nPlease select another item from the list of available menu items. \n");
+				finished = false;
 			}
-				}while (!finished);
-				
-				orderComplete();
-//				// Prompts to look up another student.
-//				System.out.println("Would you like to find out about another student? (\"yes\" to continue)");
-//				// String only exists for this version of the loop.
-//				String loop = read.nextLine();
-//				// May consider writing a method to accept "yes," y,", their capitals, etc.
-//				if (loop.equalsIgnoreCase("yes")) {
-//					finished = false;
-//				} else {
-//					finished = true;
-//				}
-//			}
-//// Here's the catch, catching the out of bounds exception.
-//			catch (ArrayIndexOutOfBoundsException ex) {
-//				// Checks which way out of bounds the input is and responds appropriately.
-//				if (indexChoice >= students.length) {
-//					System.out.println(
-//							"Thanks for your faith in our school! But there are, unfortunately, only 16 students enrolled here. Please search between 1 and 16.");
-//				} else {
-//					System.out.println(
-//							"Aw, come on! Have a little faith in our school! We've got 16 students to choose from.");
-//				}
-//				// Still looping the same way.
-//				finished = false;
-//			}
-//		} while (!finished);
-//// When it' sall said and done, we say goodbye.
-//		System.out.println("Thank you for accessing the Sky High Student Database.\nGoodbye.");
-
+		} while (!finished);
+		//Calls method to complete the bill.
+		orderComplete();
 		read.close();
 
 	}
-
+//Method to add items to the user's chopping cart.
 	private static void addToCart(String key) {
-		System.out.println(key + " costs $" + priceList.get(key) + ".\nAre you sure you want to add " + key + " to your shopping cart?");
+		//User prompt.
+		System.out.println(key + " costs $" + priceList.get(key) + ".\nAre you sure you want to add " + key
+				+ " to your shopping cart?");
+		//answer is only needed here. Verifies user wants to add item.
 		String answer = read.nextLine();
 		if (checkYes(answer)) {
 			shoppingCart.add(key);
 			System.out.println(key + " has/have been added to your cart!\n");
 		} else {
 		}
+		//Cleared here, as for loop will iterate to add every item's price that is stored in the shoppingCart list.
 		currentTotal = 0;
 		for (int i = 0; i < shoppingCart.size(); i++) {
-
+			//iterates to call each item in shoppingCart as the key for priceList, and adds this price to the current total. 
 			currentTotal += priceList.get(shoppingCart.get(i));
 		}
+		//Prints total only of items added to list.
 		System.out.println("Your current total is $" + currentTotal);
 	}
 
@@ -142,19 +131,22 @@ public class BonusLab20 {
 			System.out.println("");
 		}
 	}
+
 	private static void orderComplete() {
 		System.out.println("Okay, here's your complete order. Please verify below.\n");
 		System.out.println("Item                Price");
 		System.out.println("=========================");
-		
+
 		for (int i = 0; i < shoppingCart.size(); i++) {
-		System.out.printf("%-14s", shoppingCart.get(i));
-		System.out.printf("%12s", "$" + priceList.get(shoppingCart.get(i)) + "\n");		
+			System.out.printf("%-14s", shoppingCart.get(i));
+			System.out.printf("%12s", "$" + priceList.get(shoppingCart.get(i)) + "\n");
 		}
+		System.out.println("Your total is $" + currentTotal);
 		System.out.println(average());
-		}
+	}
+
 	private static String average() {
 		String strForFPoint = String.format("%.2f", (currentTotal / shoppingCart.size()));
-	return "Average price per item: " + strForFPoint;
+		return "Average price per item: $" + strForFPoint;
 	}
 }

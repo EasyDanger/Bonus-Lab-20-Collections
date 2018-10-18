@@ -15,3 +15,14 @@ Version History
 	--complete comments
 	--testing
 	--copy editing
+1.1--10/18/2018--Small update, cleanup
+	--comments for primary methods
+	--code cleanup formatting for primary methods.
+	Known Issues
+	--does not display most and least expensive items ordered
+	--does not allow user to add multiple of items at once.
+	--Code Cleanup, formatting
+	--copy editing
+	--complete comments
+	--testing
+	
